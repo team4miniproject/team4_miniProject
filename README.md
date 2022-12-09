@@ -5,5 +5,5 @@
 ## 업데이트내용
 - 
 ## 룰
--Bem - class name 
+- Bem - class name 
 =block__element--modifier
