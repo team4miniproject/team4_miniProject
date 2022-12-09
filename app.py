@@ -34,10 +34,10 @@ for gym in gyms:
         # else:
         #     gym_image =""
            
-        print(gymTitle)
-        print(gymLocation)
-        print(gymDesc)
-        print(gymPhoneNumber)
+        # print(gymTitle)
+        # print(gymLocation)
+        # print(gymDesc)
+        # print(gymPhoneNumber)
         # print(gym_image)
 
         doc ={
@@ -45,7 +45,7 @@ for gym in gyms:
             'gym_Location':gymLocation,
             'gym_Desc':gymDesc,
             'gym_PhoneNumber':gymPhoneNumber
-        }
+             }
 
 
         db.gym.insert_one(doc)        
@@ -53,13 +53,16 @@ for gym in gyms:
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('main.html')
 
 # 
-# 정치 get방식
+# gym get방식
 @app.route("/gyms", methods=["GET"])
 def gym_get():
     gymsList = list(db.gym.find({},{'_id':False}))
+   
+    print(gymsList)
+     
     
     return jsonify({'gymsList':gymsList})    
 
