@@ -1,4 +1,9 @@
 # team4_miniProject
-- 기획내용 
+- 로그인 기능 
+- 회원가입 기능
+- 지도 기능
 ## 업데이트내용
-- 룰같은거 적기.
+- 
+## 룰
+-Bem - class name 
+=block__element--modifier
