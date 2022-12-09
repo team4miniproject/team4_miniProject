@@ -8,9 +8,9 @@
 - Bem - class name 
 =block__element--modifier
 
-.card
-.card__img
-.card__title
-.card__descrition--black
-.card__butoon--blue
+- .card
+- .card__img
+- .card__title
+- .card__descrition--black
+- .card__butoon--blue
 
