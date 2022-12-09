@@ -59,19 +59,77 @@
         margin: 0px 0 10px 0;
       }
     </style>
+
+    <script>
+      function show_main() {
+        // $('#cards-box').empty();
+        $.ajax({
+          type: 'GET',
+          url: '/gyms',
+          data: {},
+          success: function (response) {
+            let rows = response['gymsList'];
+            for (let i = 0; i < rows.length; i++) {
+              let title = rows[i]['gym_Title'];
+              // let image = rows[i]['gym_Image'];
+              let desc = rows[i]['gym_Desc'];
+              let location = rows[i]['gym_Location'];
+              let phoneNumber = rows[i]['gym_PhoneNumber'];
+
+              let temp_html = `<div class="col" >
+                                <div OnClick=" window.open('??')" style="cursor:pointer;" class="card h-100">
+                                    <img src="??"
+                                         class="card-img-top" style="background-color: var(--bg-color);">
+                                    <div class="card-body" style="background-color: var(--bg-color);">
+                                        <h5 class="card-title">${title}</h5>
+                                        <p class="card-text">${desc}</p>
+                                    </div>
+                                </div>
+                             </div>`;
+              $('#cards-box').append(temp_html);
+            }
+          },
+        });
+      }
+    </script>
   </head>
   <body>
     <section class="topbar">
       <h1 class="topbar_title">프로젝트 이름</h1>
       <div class="topbar_category">
-        <button class="topbar_category_gym">헬스장</button>
+        <button onclick="show_main()" class="topbar_category_gym">
+          헬스장
+        </button>
         <button class="topbar_category_pilates">필라테스</button>
         <button class="topbar_category_crossfit">크로스핏</button>
       </div>
     </section>
     <section class="description">
       <div class="description_left">
-        <div class="description_left_map">지도</div>
+        <div class="description_left_map">
+          <div id="cards-box">
+            <div class="col">
+              <div
+                OnClick=" window.open('??')"
+                style="cursor: pointer"
+                class="card h-100"
+              >
+                <img
+                  src="??"
+                  class="card-img-top"
+                  style="background-color: var(--bg-color)"
+                />
+                <div
+                  class="card-body"
+                  style="background-color: var(--bg-color)"
+                >
+                  <h5 class="card-title">${title}</h5>
+                  <p class="card-text">${desc}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="description_left_comment">
           <input type="text" /> <button class="">등록</button>
         </div>
