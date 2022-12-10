@@ -64,7 +64,27 @@ def gym_get():
     print(gymsList)
      
     
-    return jsonify({'gymsList':gymsList})    
+    return jsonify({'gymsList':gymsList})
+
+#gym id,코멘트 저장 
+@app.route('/comment', methods=['POST'])
+def comment_save():
+    title_receive = request.form['title_give']
+    comment_receive = request.form['comment_give']
+    
+    doc = {'title': title_receive,'comment':comment_receive}
+    db.gymComment.insert_one(doc)
+
+    return jsonify({'msg': '저장 완료!'})
+
+# gym id,코멘트 전달
+@app.route("/comment", methods=["GET"])
+def comment_show():
+    gymCommentList = list(db.gymComment.find({},{'_id':False}))
+    print(gymCommentList)
+    return jsonify({'gymCommentList':gymCommentList})
+
+
 
 
 
