@@ -9,7 +9,6 @@ db = client.project4
 
 SECRET_KEY = 'project4'
 
-import datetime
 import hashlib
 
 @app.route('/')
@@ -38,11 +37,12 @@ def signup():
     pw_receive = request.form['pw_give']
     nickname_receive = request.form['nickname_give']
 
-    db.member.insert_one({'id': id_receive, 'pw': pw_receive, 'nick': nickname_receive})
+    pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
+
+    db.member.insert_one({'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive})
 
     return jsonify({'result': 'success'})
 
-    return render_template('join.html')
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

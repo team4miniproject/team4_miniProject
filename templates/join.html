@@ -38,7 +38,6 @@
             if (idnull == '') {
                 alert("아이디를 입력해 주세요")
                 $('#id_input').focus()
-
             } else {
                 $.ajax({
                     type: "POST",
@@ -47,6 +46,7 @@
                     success: function (response) {
                         $('#idcheck_text').text(response["msg"])
                         id_duplicate_check = response["id_duplicate_check"]
+                        console.log(id_duplicate_check)
                     }
                 })
             }
@@ -57,19 +57,21 @@
             let id = $("#id_input")
             let pw = $("#pw_input")
             let pwcheck = $("#pw_check")
-            let nickname = $('#nickname')
-
+            let nickname = $("#nickname_input")
+            console.log(nickname.val())
             //빈 칸 유효성검사
             //빈칸일 경우 alert창을 띄우고 해당칸으로 돌아간다.
             if (id.val() == "") {
-                alert("아이디를 입력해주세요");
-               id.focus();
-                return false
+              alert("아이디를 입력해주세요")
+              id.focus()
+              return false
             }
-            if(id_duplicate_check == false ){
-                alert("아이디 중복확인 해주세요")
-                return false
+            if(id_duplicate_check==false){
+              alert("아이디 중복확인 해주세요")
+              id.focus()
+              return false
             }
+
             if(pw.val() == ""){
                 alert("패스워드를 입력해주세요")
                  pw.focus()
@@ -78,21 +80,25 @@
                 alert("비밀번호 확인해주세요")
                  pwcheck.focus()
                  return false
+            }else if(pw.val()!=pwcheck.val()){
+              alert("비밀번호가 다릅니다")
+              pw.focus()
+              return false
             }
-            /*if(nickname.val()==""){
+            if(nickname.val() == ""){
                 alert("닉네임을 입력해주세요")
                  nickname.focus()
                  return false
-            }*/
+            }
 
         else {
             $.ajax({
                 type: "POST",
                 url: "/signup",
                 data: {
-                    id_give: $('#id_input').val(),
-                    pw_give: $('#pw_check').val(),
-                    nickname_give: $('#name_input').val()
+                    id_give: id.val(),
+                    pw_give: pwcheck.val(),
+                    nickname_give: nickname.val()
                 },
                 success: function (response) {
                     if (response['result'] == 'success') {
@@ -114,7 +120,7 @@
     <hr/>
     <div>
         <label for="id_input">ID : </label>
-        <input class="text" type="text" name="id" id="id_input" placeholder="아이디"/>
+        <input type="text" class="text" name="id" id="id_input" placeholder="아이디"/>
         <button onclick="idcheck()">아이디 중복확인</button>
     </div>
     <div>
@@ -130,8 +136,8 @@
         <span id="check_result"></span>
     </div>
     <div>
-        <label class="name" name="name" id="nickname" for="name_input">닉네임 : </label>
-        <input class="text" type="name" name="name" id="name_input" placeholder="닉네임"/>
+        <label class="name" name="name" id="nickname" for="nickname_input">닉네임 : </label>
+        <input type="text" class="nickname_input" name="name" id="nickname_input" placeholder="닉네임"/>
     </div>
     <div>
         <button class="sign_up" type="button" onclick="signup()">Sign up</button>
