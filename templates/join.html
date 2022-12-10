@@ -1,12 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>login</title>
-  </head>
-  <body>
-    회원가입페이지
-  </body>
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>Document</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <style>
+        .container {
+            text-align: center;
+        }
+    </style>
+    <script>
+        let id_duplicate_check = false
+        //비밀번호 일치 확인 기능
+        function pwcheck() {
+            let pw = $('#pw_input').val()
+            let pwcheck = $('#pw_check').val()
+
+            if (pw == pwcheck) {
+                $('#check_result').text("비밀번호가 일치합니다.")
+                return;
+            } else {
+                $('#check_result').text("비밀번호가 일치하지 않습니다.")
+                return;
+            }
+        }
+
+        //id중복확인
+        //notnull로 id입력칸이 비었는지 아닌지 확인
+        function idcheck() {
+            let idnull = $('#id_input').val()
+            if (idnull == '') {
+                alert("아이디를 입력해 주세요")
+                $('#id_input').focus()
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/idcheck",
+                    data: {id_give: $('#id_input').val()},
+                    success: function (response) {
+                        $('#idcheck_text').text(response["msg"])
+                        id_duplicate_check = response["id_duplicate_check"]
+                        console.log(id_duplicate_check)
+                    }
+                })
+            }
+        }
+
+        //회원가입 완료
+        function signup() {
+            let id = $("#id_input")
+            let pw = $("#pw_input")
+            let pwcheck = $("#pw_check")
+            let nickname = $("#nickname_input")
+            console.log(nickname.val())
+            //빈 칸 유효성검사
+            //빈칸일 경우 alert창을 띄우고 해당칸으로 돌아간다.
+            if (id.val() == "") {
+              alert("아이디를 입력해주세요")
+              id.focus()
+              return false
+            }
+            if(id_duplicate_check==false){
+              alert("아이디 중복확인 해주세요")
+              id.focus()
+              return false
+            }
+
+            if(pw.val() == ""){
+                alert("패스워드를 입력해주세요")
+                 pw.focus()
+                 return false
+            }else if(pwcheck.val()==""){
+                alert("비밀번호 확인해주세요")
+                 pwcheck.focus()
+                 return false
+            }else if(pw.val()!=pwcheck.val()){
+              alert("비밀번호가 다릅니다")
+              pw.focus()
+              return false
+            }
+            if(nickname.val() == ""){
+                alert("닉네임을 입력해주세요")
+                 nickname.focus()
+                 return false
+            }
+
+        else {
+            $.ajax({
+                type: "POST",
+                url: "/signup",
+                data: {
+                    id_give: id.val(),
+                    pw_give: pwcheck.val(),
+                    nickname_give: nickname.val()
+                },
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        alert('회원가입이 완료되었습니다.')
+                        window.location.href = '/'
+                    } else {
+                        alert(response['msg'])
+                    }
+                }
+
+            })
+        }
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>회원가입 창</h1>
+    <hr/>
+    <div>
+        <label for="id_input">ID : </label>
+        <input type="text" class="text" name="id" id="id_input" placeholder="아이디"/>
+        <button onclick="idcheck()">아이디 중복확인</button>
+    </div>
+    <div>
+        <span id="idcheck_text"></span>
+    </div>
+    <div>
+        <label for="pw_input">PW : </label>
+        <input type="password" class="pw" name="password" id="pw_input" placeholder="패스워드"/>
+    </div>
+    <div>
+        <label for="pw_check">PW : </label>
+        <input type="password" class="pw" name="password" id="pw_check" onkeyup="pwcheck()" placeholder="패스워드확인"/>
+        <span id="check_result"></span>
+    </div>
+    <div>
+        <label class="name" name="name" id="nickname" for="nickname_input">닉네임 : </label>
+        <input type="text" class="nickname_input" name="name" id="nickname_input" placeholder="닉네임"/>
+    </div>
+    <div>
+        <button class="sign_up" type="button" onclick="signup()">Sign up</button>
+        <button class="sign_up" type="button">취소</button>
+    </div>
+
+</div>
+
+</body>
 </html>
+
+</html>
+
+
