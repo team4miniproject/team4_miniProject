@@ -26,16 +26,28 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     <style>
+      @font-face {
+        font-family: 'Cafe24Ssurround';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24Ssurround.woff')
+          format('woff');
+        font-weight: normal;
+        font-style: normal;
+      }
+      * {
+        font-family: 'Cafe24Ssurround';
+      }
+
       .section {
         max-width: 2000px;
         width: 100%;
+        margin: 40px 40px 40px 40px;
         /* height: 1000px; */
-        background-color: red;
+
         margin: 20px 20px 20px 20px;
       }
       .loginMainBox {
         /* height: 2000px; */
-        background-color: blue;
+        background-color: transparent;
         display: flex;
       }
 
@@ -43,9 +55,14 @@
         background-color: black;
         flex-basis: 60%;
       }
+      .login__titlebox_input {
+        max-width: 200px;
+        width: 100%;
+        height: 40px;
+      }
 
       .login__titlebox_right {
-        background-color: beige;
+        background-color: transparent;
         flex-basis: 40%;
         text-align: center;
       }
@@ -53,8 +70,24 @@
       .login__titlebox {
         margin: 20px 0px 30px 0;
       }
+      .login__titlebox_Btn {
+        max-width: 200px;
+        width: 100%;
+        height: 40px;
+        font-size: larger;
+        border-radius: 50px;
+        background-color: skyblue;
+        border: skyblue;
+        color: white;
+      }
+
+      .login__titlebox_Btn:hover {
+        background-color: cornflowerblue;
+        transition: all 1s ease;
+      }
     </style>
     <script>
+      //################################################################################### 로그인버튼 클릭시
       function login() {
         let a = $('#userid').val();
         console.log(a);
@@ -77,6 +110,7 @@
           },
         });
       }
+      //################################################################################### 회원가입버튼 클릭시
       function signUp() {
         window.location.href = '/join';
       }
@@ -84,25 +118,36 @@
   </head>
   <body>
     <div class="section">
-      ss
       <div class="loginMainBox">
-        <div class="login__titlebox_left">img</div>
+        <div class="login__titlebox_left">
+          <img src="KakaoTalk.png" />
+        </div>
 
         <div class="login__titlebox_right">
           <div class="login__titlebox titlename">
-            <h1>프로젝트 이름</h1>
+            <h1>BadGym OUT!</h1>
           </div>
           <div class="login__titlebox username">
-            <span>username<input type="text" id="userid" /></span>
+            <span
+              ><input
+                class="login__titlebox_input"
+                placeholder="ID"
+                type="text"
+                id="userid"
+            /></span>
           </div>
           <div class="login__titlebox password">
-            <span>password<input type="password" id="userpw" /></span>
+            <span
+              ><input class="login__titlebox_input" type="password" id="userpw"
+            /></span>
           </div>
           <div class="login__titlebox loginBtn">
-            <button onclick="login()">Login</button>
+            <button class="login__titlebox_Btn" onclick="login()">Login</button>
           </div>
           <div class="login__titlebox signupBtn">
-            <button onclick="signUp()">Sign Up</button>
+            <button class="login__titlebox_Btn" onclick="signUp()">
+              Sign Up
+            </button>
           </div>
         </div>
       </div>

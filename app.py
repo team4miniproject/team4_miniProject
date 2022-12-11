@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session ,redirect, url_for
 app = Flask(__name__)
 
 from pymongo import MongoClient
@@ -20,7 +20,7 @@ import datetime
 import hashlib
 
 
-# 헬스장 완료
+# 헬스장 크롤링
 headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 data = requests.get('https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=%ED%97%AC%EC%8A%A4%EC%9E%A5', headers=headers)
@@ -35,28 +35,15 @@ for gym in gyms:
         gymTitle= gym.select_one('div.ouxiq.icT4K > a:nth-child(1) > div > div > span.place_bluelink.YwYLL').text
         gymLocation= gym.select_one('div.rDx68 > div > span > a > span.hClKF').text
         gymDesc= gym.select_one('div.ouxiq.icT4K > a:nth-child(3) > div > div > span.XP3ml.A2p8S').text
-        # gymImage= gym.select_one('div.TTfa9 > a > div > img')
         gymPhoneNumber= gym.select_one('div.ouxiq.icT4K > div.mqM2N.l8afP').text
                 
-        # if gymImage != None:
-        #    gym_image = gymImage
-        # else:
-        #     gym_image =""
-           
-        # print(gymTitle)
-        # print(gymLocation)
-        # print(gymDesc)
-        # print(gymPhoneNumber)
-        # print(gym_image)
-
         doc ={
             'gym_Title':gymTitle,
             'gym_Location':gymLocation,
             'gym_Desc':gymDesc,
             'gym_PhoneNumber':gymPhoneNumber
              }
-
-
+        # 헬스장이름,위치,영업시간,전화번호 DB저장
         db.gym.insert_one(doc)  
 
 
@@ -73,7 +60,17 @@ def join():
 # 메인페이지
 @app.route('/main')
 def main():
-    return render_template('main.html')        
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.member.find_one({"id": payload['id']})
+        return render_template('main.html', nickname=user_info["nick"])
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("join", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("join", msg="로그인 정보가 존재하지 않습니다."))
+    
+    # return render_template('main.html')        
 
 
 #############################################################################로그인
@@ -98,7 +95,7 @@ def api_login():
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
             'id': id_receive,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes= 3)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
@@ -109,38 +106,32 @@ def api_login():
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
 
-# # [유저 정보 확인 API]
-# # 로그인된 유저만 call 할 수 있는 API입니다.
-# # 유효한 토큰을 줘야 올바른 결과를 얻어갈 수 있습니다.
-# # (그렇지 않으면 남의 장바구니라든가, 정보를 누구나 볼 수 있겠죠?)
-# @app.route('/api/nick', methods=['GET'])
-# def api_valid():
-#     token_receive = request.cookies.get('mytoken')
+# [유저 정보 확인 API]
+# 로그인된 유저만 call 할 수 있는 API입니다.
+# 유효한 토큰을 줘야 올바른 결과를 얻어갈 수 있습니다.
+# (그렇지 않으면 남의 장바구니라든가, 정보를 누구나 볼 수 있겠죠?)
+@app.route('/api/nick', methods=['GET'])
+def api_valid():
+    token_receive = request.cookies.get('mytoken')
 
-#     # try / catch 문?
-#     # try 아래를 실행했다가, 에러가 있으면 except 구분으로 가란 얘기입니다.
+    # try / catch 문?
+    # try 아래를 실행했다가, 에러가 있으면 except 구분으로 가란 얘기입니다.
 
-#     try:
-#         # token을 시크릿키로 디코딩합니다.
-#         # 보실 수 있도록 payload를 print 해두었습니다. 우리가 로그인 시 넣은 그 payload와 같은 것이 나옵니다.
-#         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-#         print(payload)
+    try:
+        # token을 시크릿키로 디코딩합니다.
+        # 보실 수 있도록 payload를 print 해두었습니다. 우리가 로그인 시 넣은 그 payload와 같은 것이 나옵니다.
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        print(payload)
 
-#         # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
-#         # 여기에선 그 예로 닉네임을 보내주겠습니다.
-#         userinfo = db.user.find_one({'id': payload['id']}, {'_id': 0})
-#         return jsonify({'result': 'success', 'nickname': userinfo['nick']})
-#     except jwt.ExpiredSignatureError:
-#         # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
-#         return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
-#     except jwt.exceptions.DecodeError:
-#         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})        
-
-
-
-
-
-
+        # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
+        # 여기에선 그 예로 닉네임을 보내주겠습니다.
+        userinfo = db.member.find_one({'id': payload['id']}, {'_id': 0})
+        return jsonify({'result': 'success', 'nickname': userinfo['nick']})
+    except jwt.ExpiredSignatureError:
+        # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
+        return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
+    except jwt.exceptions.DecodeError:
+        return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})        
 
 
 #############################################################################회원가입
@@ -174,32 +165,32 @@ def signup():
 
     return jsonify({'result': 'success'})
 
-# gym get방식
+######################################################################## gym 리스트표시
 @app.route("/gyms", methods=["GET"])
 def gym_get():
     gymsList = list(db.gym.find({},{'_id':False}))
    
-    print(gymsList)
+    
      
     
     return jsonify({'gymsList':gymsList})
 
-#gym id,코멘트 저장 
+#####################################################gym이름,코멘트 저장,로그인닉네임 
 @app.route('/comment', methods=['POST'])
 def comment_save():
     title_receive = request.form['title_give']
     comment_receive = request.form['comment_give']
-    
-    doc = {'title': title_receive,'comment':comment_receive}
+    nick_receive = request.form['nick_give']
+    doc = {'title': title_receive,'comment':comment_receive,'nick':nick_receive}
     db.gymComment.insert_one(doc)
 
     return jsonify({'msg': '저장 완료!'})
 
-# gym id,코멘트 전달
+####################################################### gym id,코멘트 전달
 @app.route("/comment", methods=["GET"])
 def comment_show():
     gymCommentList = list(db.gymComment.find({},{'_id':False}))
-    print(gymCommentList)
+    
     return jsonify({'gymCommentList':gymCommentList})    
 
 
