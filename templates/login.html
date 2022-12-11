@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>헬스장</title>
+    <!-- 구글폰트 시작코드 -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap"
+      rel="stylesheet"
+    />
+    <!-- 폰트어썸 시작코드 -->
+    <script
+      src="https://kit.fontawesome.com/06632c157c.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- 부트스트랩 시작코드 -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <!-- 제이쿼리,에이잭스 시작코드 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <style>
+      @font-face {
+        font-family: 'Cafe24Ssurround';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24Ssurround.woff')
+          format('woff');
+        font-weight: normal;
+        font-style: normal;
+      }
+      * {
+        font-family: 'Cafe24Ssurround';
+      }
+
+      .section {
+        max-width: 2000px;
+        width: 100%;
+        margin: 40px 40px 40px 40px;
+        /* height: 1000px; */
+
+        margin: 20px 20px 20px 20px;
+      }
+      .loginMainBox {
+        /* height: 2000px; */
+        background-color: transparent;
+        display: flex;
+      }
+
+      .login__titlebox_left {
+        background-color: black;
+        flex-basis: 60%;
+      }
+      .login__titlebox_input {
+        max-width: 200px;
+        width: 100%;
+        height: 40px;
+      }
+
+      .login__titlebox_right {
+        background-color: transparent;
+        flex-basis: 40%;
+        text-align: center;
+      }
+
+      .login__titlebox {
+        margin: 20px 0px 30px 0;
+      }
+      .login__titlebox_Btn {
+        max-width: 200px;
+        width: 100%;
+        height: 40px;
+        font-size: larger;
+        border-radius: 50px;
+        background-color: skyblue;
+        border: skyblue;
+        color: white;
+      }
+
+      .login__titlebox_Btn:hover {
+        background-color: cornflowerblue;
+        transition: all 1s ease;
+      }
+    </style>
+    <script>
+      //################################################################################### 로그인버튼 클릭시
+      function login() {
+        let a = $('#userid').val();
+        console.log(a);
+        $.ajax({
+          type: 'POST',
+          url: '/api/login',
+          data: { id_give: $('#userid').val(), pw_give: $('#userpw').val() },
+          success: function (response) {
+            if (response['result'] == 'success') {
+              // 로그인이 정상적으로 되면, 토큰을 받아옵니다.
+              // 이 토큰을 mytoken이라는 키 값으로 쿠키에 저장합니다.
+              $.cookie('mytoken', response['token']);
+
+              alert('로그인 완료!');
+              window.location.href = '/main';
+            } else {
+              // 로그인이 안되면 에러메시지를 띄웁니다.
+              alert(response['msg']);
+            }
+          },
+        });
+      }
+      //################################################################################### 회원가입버튼 클릭시
+      function signUp() {
+        window.location.href = '/join';
+      }
+    </script>
+  </head>
+  <body>
+    <div class="section">
+      <div class="loginMainBox">
+        <div class="login__titlebox_left">
+          <img src="KakaoTalk.png" />
+        </div>
+
+        <div class="login__titlebox_right">
+          <div class="login__titlebox titlename">
+            <h1>BadGym OUT!</h1>
+          </div>
+          <div class="login__titlebox username">
+            <span
+              ><input class="login__titlebox_input" placeholder="ID" type="text" id="userid"/></span>
+          </div>
+          <div class="login__titlebox password">
+            <span><input class="login__titlebox_input" type="password" id="userpw"/></span>
+          </div>
+          <div class="login__titlebox loginBtn">
+            <button class="login__titlebox_Btn" onclick="login()">Login</button>
+          </div>
+          <div class="login__titlebox signupBtn">
+            <button class="login__titlebox_Btn" onclick="signUp()">
+              Sign Up
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
