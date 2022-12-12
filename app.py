@@ -20,7 +20,7 @@ import datetime
 import hashlib
 
 
-# 헬스장 크롤링
+############################################################################### 헬스장 크롤링
 headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 data = requests.get('https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=%ED%97%AC%EC%8A%A4%EC%9E%A5', headers=headers)
@@ -28,37 +28,189 @@ data = requests.get('https://search.naver.com/search.naver?where=nexearch&sm=top
 soup = BeautifulSoup(data.text, 'html.parser')
 
 gyms = soup.select('#loc-main-section-root > section > div > ul > li')
-db.gym.delete_many({})
+db.gymtest.delete_many({})
 
 for gym in gyms:
     if gym != None:
         gymTitle= gym.select_one('div.ouxiq.icT4K > a:nth-child(1) > div > div > span.place_bluelink.YwYLL').text
         gymLocation= gym.select_one('div.rDx68 > div > span > a > span.hClKF').text
-        desc = gym.select_one('div.ouxiq.icT4K > a:nth-child(3) > div > div > span.XP3ml.A2p8S')
-        if desc != None :
-            gymDesc = desc.text
-        else :
-            gymDesc = ""
-        gymPhoneNumber= gym.select_one('div.ouxiq.icT4K > div.mqM2N.l8afP').text
-                
+        Desc= gym.select_one('div.ouxiq.icT4K > a:nth-child(3) > div > div > span.XP3ml.A2p8S')
+        if Desc !=None:
+            gymDesc = Desc.text
+        else:
+            gymDesc=""
+        PhoneNumber= gym.select_one('div.ouxiq.icT4K > div.mqM2N.l8afP')
+        if PhoneNumber !=None:
+            gymPhoneNumber = PhoneNumber.text
+        else:
+            gymPhoneNumber=""
+
+        category= 'gym'        
         doc ={
-            'gym_Title':gymTitle,
-            'gym_Location':gymLocation,
-            'gym_Desc':gymDesc,
-            'gym_PhoneNumber':gymPhoneNumber
+            'category': category,
+            'Title':gymTitle,
+            'Location':gymLocation,
+            'Desc':gymDesc,
+            'PhoneNumber':gymPhoneNumber
              }
         # 헬스장이름,위치,영업시간,전화번호 DB저장
-        db.gym.insert_one(doc)  
+        db.gymtest.insert_one(doc)  
+
+################################################################################ 필라테스 크롤링
+headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+data = requests.get('https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=%ED%95%84%EB%9D%BC%ED%85%8C%EC%8A%A4', headers=headers)
+
+soup = BeautifulSoup(data.text, 'html.parser')
+
+pilateses = soup.select('#loc-main-section-root > section > div > ul > li')
+# db.gymtest.delete_many({})
+
+for pilates in pilateses:
+    if pilates != None:
+        pilatesTitle= pilates.select_one('div.ouxiq.icT4K > a:nth-child(1) > div > div > span.place_bluelink.YwYLL').text
+        pilatesLocation= pilates.select_one('div.ouxiq.icT4K > div.rDx68 > div > span > a > span.hClKF').text
+        Desc= pilates.select_one('div.ouxiq.icT4K > a:nth-child(3) > div > div > span:nth-child(2)')
+        if Desc != None:
+            pilatesDesc = Desc.text
+        else:
+            pilatesDesc = ""
+        PhoneNumber= pilates.select_one('div.ouxiq.icT4K > div.mqM2N.l8afP')
+        if PhoneNumber !=None:
+            pilatesPhoneNumber = PhoneNumber.text
+        else:
+            pilatesPhoneNumber=""
+        
+        category= 'pilates'        
+        doc ={
+            'category': category,
+            'Title':pilatesTitle,
+            'Location':pilatesLocation,
+            'Desc':pilatesDesc,
+            'PhoneNumber':pilatesPhoneNumber
+             }
+        db.gymtest.insert_one(doc)
+
+################################################################################ 크로스핏 크롤링
+headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+data = requests.get('https://search.naver.com/search.naver?sm=tab_hty.top&where=nexearch&query=%ED%81%AC%EB%A1%9C%EC%8A%A4%ED%95%8F&oquery=%ED%81%AC%EB%A1%9C%EC%8A%A4%ED%94%BD&tqi=hHju7wp0JywssdOuQplssssssgd-212890', headers=headers)
+
+soup = BeautifulSoup(data.text, 'html.parser')
+
+crossfites = soup.select('#loc-main-section-root > section > div > ul > li')
+# db.gymtest.delete_many({})
+
+for crossfit in crossfites:
+    if crossfit != None:
+        crossfitTitle= crossfit.select_one('a:nth-child(1) > div > div > span.place_bluelink.YwYLL').text
+        crossfitLocation= crossfit.select_one('div.rDx68 > div > span > a > span.hClKF').text
+        Desc= crossfit.select_one('div.ouxiq.icT4K > a:nth-child(3) > div > div > span:nth-child(2)')
+        if Desc != None:
+            crossfitDesc = Desc.text
+        else:
+            crossfitDesc = ""
+        PhoneNumber= crossfit.select_one('div.mqM2N.l8afP')
+        if PhoneNumber !=None:
+            crossfitPhoneNumber = PhoneNumber.text
+        else:
+            crossfitPhoneNumber=""
+        
+        category= 'crossfit'
+        doc ={
+            'category': category,
+            'Title':crossfitTitle,
+            'Location':crossfitLocation,
+            'Desc':crossfitDesc,
+            'PhoneNumber':crossfitPhoneNumber
+             }
+        db.gymtest.insert_one(doc)
+
+
+# 수영장 크롤링
+headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+data = requests.get('https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=%EC%88%98%EC%98%81%EC%9E%A5', headers=headers)
+
+soup = BeautifulSoup(data.text, 'html.parser')
+
+swimming_pools = soup.select('#loc-main-section-root > section > div > ul > li')
+# db.gymtest.delete_many({})
+
+for swimming_pool in swimming_pools:
+    if swimming_pool != None:
+        swimming_poolTitle= swimming_pool.select_one('a:nth-child(1) > div > div > span.place_bluelink.YwYLL').text
+        swimming_poolLocation= swimming_pool.select_one('div.rDx68 > div > span > a > span.hClKF').text
+        Desc= swimming_pool.select_one('div.ouxiq.icT4K > a:nth-child(3) > div > div > span:nth-child(2)')
+        if Desc != None:
+            swimming_poolDesc = Desc.text
+        else:
+            swimming_poolDesc = ""
+        poolPhoneNumber = swimming_pool.select_one('div.mqM2N.l8afP')
+        if poolPhoneNumber != None:
+            swimming_poolPhoneNumber = poolPhoneNumber.text
+        else:
+            swimming_poolDesc = ""
+        category= 'swimming_pool'
+
+        doc ={
+            'category': category,
+            'Title':swimming_poolTitle,
+            'Location':swimming_poolLocation,
+            'Desc':swimming_poolDesc,
+            'PhoneNumber':swimming_poolPhoneNumber
+             }
+        db.gymtest.insert_one(doc)
+
+
+# 클라이밍 크롤링
+headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+data = requests.get('https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=%ED%81%B4%EB%9D%BC%EC%9D%B4%EB%B0%8D', headers=headers)
+
+soup = BeautifulSoup(data.text, 'html.parser')
+
+climbings = soup.select('#loc-main-section-root > section > div > ul > li')
+# db.gymtest.delete_many({})
+
+for climbing in climbings:
+    if climbing != None:
+        climbingTitle= climbing.select_one('a:nth-child(1) > div > div > span.place_bluelink.YwYLL').text
+        climbingLocation= climbing.select_one('div.rDx68 > div > span > a > span.hClKF').text
+        Desc= climbing.select_one('div.ouxiq.icT4K > a:nth-child(3) > div > div > span:nth-child(2)')
+        if Desc != None:
+            climbingDesc = Desc.text
+        else:
+            climbingDesc = ""
+        PhoneNumber= climbing.select_one('div.mqM2N.l8afP')
+        if PhoneNumber !=None:
+            climbingPhoneNumber = PhoneNumber.text
+        else:
+            climbingPhoneNumber=""     
+        
+        category= 'climbing'
+        doc ={
+            'category': category,
+            'Title':climbingTitle,
+            'Location':climbingLocation,
+            'Desc':climbingDesc,
+            'PhoneNumber':climbingPhoneNumber
+             }
+        db.gymtest.insert_one(doc)
+
+
+
+
+
+
+
+
 
 
 
 # 시작페이지=로그인페이지
 @app.route('/')
 def home():
-    return render_template('login.html')
-
-@app.route('/logoutmain')
-def logoutmain():
     return render_template('login.html')
 
 # /회원가입페이지
@@ -74,9 +226,9 @@ def main():
         user_info = db.member.find_one({"id": payload['id']})
         return render_template('main.html', nickname=user_info["nick"])
     except jwt.ExpiredSignatureError:
-        return redirect(url_for("logoutmain", msg="로그인 시간이 만료되었습니다."))
+        return redirect(url_for("join", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
-        return redirect(url_for("logoutmain", msg="로그인 정보가 존재하지 않습니다."))
+        return redirect(url_for("join", msg="로그인 정보가 존재하지 않습니다."))
     
     # return render_template('main.html')        
 
@@ -93,8 +245,8 @@ def api_login():
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
 
     # id, 암호화된pw을 가지고 해당 유저를 찾습니다.
-    result = db.member.find_one({'id': id_receive})
-    result['pw']
+    result = db.member.find_one({'id': id_receive, 'pw': pw_hash})
+
     # 찾으면 JWT 토큰을 만들어 발급합니다.
     if result is not None:
         # JWT 토큰에는, payload와 시크릿키가 필요합니다.
@@ -103,13 +255,13 @@ def api_login():
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
             'id': id_receive,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=5)
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes= 300)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
         # token을 줍니다.
         return jsonify({'result': 'success', 'token': token})
-        # 찾지 못하면
+    # 찾지 못하면
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
@@ -173,34 +325,101 @@ def signup():
 
     return jsonify({'result': 'success'})
 
-######################################################################## gym 리스트표시
+######################################################################## 헬스장 리스트표시
 @app.route("/gyms", methods=["GET"])
 def gym_get():
-    gymsList = list(db.gym.find({},{'_id':False}))
-   
+    gymsList = list(db.gymtest.find({'category':'gym'},{'_id':False}))
     
-     
     
     return jsonify({'gymsList':gymsList})
 
-#####################################################gym이름,코멘트 저장,로그인닉네임 
+
+
+######################################################################## 필라테스 리스트표시
+@app.route("/pilates", methods=["GET"])
+def pilates_get():
+    pilatesList = list(db.gymtest.find({'category':'pilates'},{'_id':False}))
+    
+    
+    return jsonify({'gymsList':pilatesList})
+
+
+######################################################################## 크로스핏 리스트표시
+@app.route("/crossfit", methods=["GET"])
+def crossfit_get():
+    crossfitList = list(db.gymtest.find({'category':'crossfit'},{'_id':False}))
+    
+    
+    return jsonify({'gymsList':crossfitList})
+
+
+########################################################################### 수영장 리스트표시
+@app.route("/swimming_pool", methods=["GET"])
+def swimming_pool_get():
+    swimming_poolList = list(db.gymtest.find({'category':'swimming_pool'},{'_id':False}))
+    
+    
+    return jsonify({'gymsList':swimming_poolList})
+
+
+#####FIXME:################################################################### 클라이밍 리스트표시
+@app.route("/climbing", methods=["GET"])
+def climbing_get():
+    climbingList = list(db.gymtest.find({'category':'climbing'},{'_id':False}))
+    
+    
+    return jsonify({'gymsList':climbingList})    
+
+
+#####################################################이름,코멘트 저장,로그인닉네임 
 @app.route('/comment', methods=['POST'])
 def comment_save():
     title_receive = request.form['title_give']
     comment_receive = request.form['comment_give']
     nick_receive = request.form['nick_give']
-    doc = {'title': title_receive,'comment':comment_receive,'nick':nick_receive}
+    category_receive = request.form['category_give']
+    doc = {'category':category_receive,'title': title_receive,'comment':comment_receive,'nick':nick_receive}
     db.gymComment.insert_one(doc)
 
     return jsonify({'msg': '저장 완료!'})
 
-####################################################### gym id,코멘트 전달
+####################################################### 헬스장 id,코멘트 표시
 @app.route("/comment", methods=["GET"])
-def comment_show():
-    gymCommentList = list(db.gymComment.find({},{'_id':False}))
+def gym_comment_show():
+    gymCommentList = list(db.gymComment.find({'category':'gym'},{'_id':False}))
     
     return jsonify({'gymCommentList':gymCommentList})    
 
+
+####################################################### 필라테스 id,코멘트 표시
+@app.route("/pila_comment", methods=["GET"])
+def pilates_comment_show():
+    gymCommentList = list(db.gymComment.find({'category':'pilates'},{'_id':False}))
+    
+    return jsonify({'gymCommentList':gymCommentList})
+
+####################################################### 크로스핏 id,코멘트 표시
+@app.route("/crossfit_comment", methods=["GET"])
+def crossfit_comment_show():
+    gymCommentList = list(db.gymComment.find({'category':'crossfit'},{'_id':False}))
+    
+    return jsonify({'gymCommentList':gymCommentList})
+
+
+####################################################### 크로스핏 id,코멘트 표시
+@app.route("/swimming_pool_comment", methods=["GET"])
+def swimming_pool_comment_show():
+    gymCommentList = list(db.gymComment.find({'category':'swimming_pool'},{'_id':False}))
+    
+    return jsonify({'gymCommentList':gymCommentList})
+
+
+####################################################### 크로스핏 id,코멘트 표시
+@app.route("/climbing_comment", methods=["GET"])
+def climbing_comment_show():
+    gymCommentList = list(db.gymComment.find({'category':'climbing'},{'_id':False}))
+    
+    return jsonify({'gymCommentList':gymCommentList})
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

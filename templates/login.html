@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>헬스장</title>
+       <title>헬스장</title>
     <!-- 구글폰트 시작코드 -->
     <link
       href="https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap"
@@ -34,34 +34,62 @@
         font-style: normal;
       }
       * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
         font-family: 'Cafe24Ssurround';
+
       }
 
+      body{
+        height: 100vh;
+        background:linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://images.squarespace-cdn.com/content/v1/56e487181d07c0743d227289/1557248970918-530M1TO27B7Q41OEE985/fitness-4-1500x77.jpg?format=1500w) no-repeat center;
+        background-size:cover;
+      }
       .section {
-        max-width: 2000px;
-        width: 100%;
-        margin: 40px 40px 40px 40px;
-        /* height: 1000px; */
+        text-align: center;
+        display: flex;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border-radius: 10px;
 
-        margin: 20px 20px 20px 20px;
       }
+      .center{
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        text-align: center;
+        width: 500px;
+        height: 500px;
+        transform: translate(-50%, -50%);
+      }
+
       .loginMainBox {
         /* height: 2000px; */
-        background-color: transparent;
+        border-radius: 20px;
+        border: 1px #2d2d2d solid;
+        background-color: #2e2e2e;
+        background-color: rgba(51, 51, 51, 0.89);
+        width: 500px;
         display: flex;
+        justify-content: center;
+        position: absolute;
+        margin-top: 10%;
       }
 
-      .login__titlebox_left {
-        background-color: black;
-        flex-basis: 60%;
-      }
       .login__titlebox_input {
+        opacity: 1;
         max-width: 200px;
         width: 100%;
         height: 40px;
       }
 
       .login__titlebox_right {
+
         background-color: transparent;
         flex-basis: 40%;
         text-align: center;
@@ -69,6 +97,10 @@
 
       .login__titlebox {
         margin: 20px 0px 30px 0;
+      }
+      .login__titlebox > h1{
+        display: flex;
+        color: white;
       }
       .login__titlebox_Btn {
         max-width: 200px;
@@ -118,32 +150,28 @@
   </head>
   <body>
     <div class="section">
+      <div class="center">
       <div class="loginMainBox">
-        <div class="login__titlebox_left">
-          <img src="KakaoTalk.png" />
-        </div>
-
         <div class="login__titlebox_right">
           <div class="login__titlebox titlename">
             <h1>BadGym OUT!</h1>
           </div>
           <div class="login__titlebox username">
-            <span
-              ><input class="login__titlebox_input" placeholder="ID" type="text" id="userid"/></span>
+            <span><input class="login__titlebox_input" placeholder="ID" type="text" id="userid"
+            /></span>
           </div>
           <div class="login__titlebox password">
-            <span><input class="login__titlebox_input" type="password" id="userpw"/></span>
+            <span><input class="login__titlebox_input" type="password" id="userpw" placeholder="PW" /></span>
           </div>
           <div class="login__titlebox loginBtn">
             <button class="login__titlebox_Btn" onclick="login()">Login</button>
           </div>
           <div class="login__titlebox signupBtn">
-            <button class="login__titlebox_Btn" onclick="signUp()">
-              Sign Up
-            </button>
+            <button class="login__titlebox_Btn" onclick="signUp()">Sign Up</button>
           </div>
         </div>
       </div>
+    </div>
     </div>
   </body>
 </html>
