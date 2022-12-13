@@ -1,11 +1,12 @@
-# BadGymOut!-(4조-김승주,김유래,정필원,김지석)
+### 4조 김승주,김유래,정필원,김지석
 
-
+# BadGymOut!
 ![image](https://user-images.githubusercontent.com/86154028/207250063-3aab3e56-3f9b-4090-bde9-32d5cfdc3b6a.png)
 
 - 우리동네 근처 스포츠시설!  
 - 유저들의 실시간 리뷰 
 - 같은 카테고리내의 다른 스포츠시설과 한눈 비교  
+
 
 ## 기술스택
 - html
