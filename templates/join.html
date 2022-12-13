@@ -4,17 +4,108 @@
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-    <title>Document</title>
+    <title>BadGymOUT!</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     <style>
+        @font-face {
+          font-family: 'Nanum Gothic', sans-serif;
+          src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24Ssurround.woff')
+            format('woff');
+          font-weight: normal;
+          font-style: normal;
+        }
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          font-family: 'Nanum Gothic', sans-serif;
+        }
+  
+        body{
+          height: 100vh;
+          background:linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://images.squarespace-cdn.com/content/v1/56e487181d07c0743d227289/1557248970918-530M1TO27B7Q41OEE985/fitness-4-1500x77.jpg?format=1500w) no-repeat center;
+          background-size:cover;
+        }
+
+
         .container {
+            border-radius: 20px;
+            border: 1px #222222;
+            border-color: rgba(51, 51, 51, 0.6);
+            background-color: #222222;
+            background-color: rgba(51, 51, 51, 0.6);
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
             text-align: center;
+            width: 500px;
+            height: 510px;
+            transform: translate(-50%, -50%);
+
+
+        }
+
+        h1{
+            margin-top: 20px;
+            font-size: 2.5rem;
+            color: skyblue;
+        }
+    
+        .join > div{
+            margin: 10px;
+        }    
+        .join > div > input{
+            width: 450px;
+            height: 50px;
+            border-radius: 5px;
+        }
+        .buttons>button{
+            height: 30px;
+            width: 100px;
+        }
+        .buttons>button:hover{
+            background-color: skyblue;
+            color: #fff;
+        }
+        /* id */
+        .id{
+            border-top: 1px #2d2d2d solid;
+            padding-top: 20px;
+            position: relative;
+        }
+        .check{
+            height: 34px;
+            width: 80px;
+            position: absolute;
+            top: 27px;
+            right: 20px;
+        }
+
+        /* password */
+        .pssword{
+            border-top: 1px #2d2d2d solid;
+            padding-top: 20px;
+        }
+        .pssword > input{
+            margin: 10px;
+        }
+        /* nick */
+        .nick{
+            border-top: 1px #2d2d2d solid;
+            padding-top: 20px;
+        }
+        .idcheck{
+            color: white;
+        }
+        .pwcheck{
+            color: white;
         }
     </style>
+
     <script>
         let id_duplicate_check = false
         //################################################################################### 비밀번호 일치검사 onkey사용
@@ -113,39 +204,40 @@
             })
         }
         }
+        function cancle(){
+           history.back()
+        }
     </script>
 </head>
 <body>
-<div class="container">
-    <h1>회원가입 창</h1>
-    <hr/>
-    <div>
-        <label for="id_input">ID : </label>
-        <input type="text" class="text" name="id" id="id_input" placeholder="아이디"/>
-        <button onclick="idcheck()">아이디 중복확인</button>
-    </div>
-    <div>
-        <span id="idcheck_text"></span>
-    </div>
-    <div>
-        <label for="pw_input">PW : </label>
-        <input type="password" class="pw" name="password" id="pw_input" placeholder="패스워드"/>
-    </div>
-    <div>
-        <label for="pw_check">PW : </label>
-        <input type="password" class="pw" name="password" id="pw_check" onkeyup="pwcheck()" placeholder="패스워드확인"/>
-        <span id="check_result"></span>
-    </div>
-    <div>
-        <label class="name" name="name" id="nickname" for="nickname_input">닉네임 : </label>
-        <input type="text" class="nickname_input" name="name" id="nickname_input" placeholder="닉네임"/>
-    </div>
-    <div>
-        <button class="sign_up" type="button" onclick="signup()">Sign up</button>
-        <button class="sign_up" type="button">취소</button>
-    </div>
+    <section class="wrap">
+        <div class="container">
+            <div class="join">
+                <h1>BadGym OUT!</span></h1>
+                <div class="id">
+                    <input type="text" class="text" name="id" id="id_input" placeholder="아이디를 입력하세요."/>
+                    <button onclick="idcheck()" class="check">중복확인</button>
 
-</div>
+                </div>
+                <div>
+                     <span class="idcheck" id="idcheck_text"></span>
+                </div>
+                <div class="pssword">
+                    <input type="password" class="pw" name="password" id="pw_input" placeholder="비밀번호를 입력하세요."/>
+                    <input type="password" class="pw" name="password" id="pw_check" onkeyup="pwcheck()" placeholder="비밀번호를 재 입력하세요."/>
+
+                    <span class="pwcheck" id="check_result"></span>
+                </div>
+                <div class="nick">
+                    <input type="text" class="nickname_input" name="name" id="nickname_input" placeholder="닉네임을 입력하세요."/>
+                </div>
+                <div class="buttons">
+                    <button class="sign_up" type="button" onclick="signup()">Sign up</button>
+                    <button class="sign_up" type="button" onclick="cancle() ">취소</button>
+                </div>    
+            </div>
+        </div>    
+    </section>
 
 </body>
 </html>
