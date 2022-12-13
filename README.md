@@ -1,14 +1,14 @@
 # BadGumOut!
---![image](https://user-images.githubusercontent.com/86154028/207250063-3aab3e56-3f9b-4090-bde9-32d5cfdc3b6a.png)
+![image](https://user-images.githubusercontent.com/86154028/207250063-3aab3e56-3f9b-4090-bde9-32d5cfdc3b6a.png)
 
--- 우리동네 근처 스포츠시설!확인
--- 유저들의 실시간 리뷰
--- 다른 스포츠 시설과의 한눈비교
+-우리동네 근처 스포츠시설!확인  
+- 유저들의 실시간 리뷰  
+- 다른 스포츠 시설과의 한눈비교  
 
 # 핵심기능
-JWT인증 로그인
-회원가입시 id중복체크, pw일치여부
-메인페이지 해당 카테고리 리뷰등록 
+JWT인증 로그인  
+회원가입시 id중복체크, pw일치여부  
+메인페이지 해당 카테고리 리뷰등록   
 
 # 와이어프레임
 
